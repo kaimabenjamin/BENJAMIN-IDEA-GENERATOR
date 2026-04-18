@@ -1,0 +1,7 @@
+{
+  "name": "BENJAMIN IDEA GENERATOR",
+  "description": "An AI-powered tool to generate creative and engaging video ideas. Users can input a topic, and the app will provide a list of concepts complete with titles, hashtags, and sound suggestions.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

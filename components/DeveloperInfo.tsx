@@ -1,0 +1,97 @@
+import React, { useState } from 'react';
+import { MailIcon, SendHorizonalIcon, CheckCircle2Icon, AlertTriangleIcon, LoaderCircleIcon, UserCircleIcon } from './icons';
+
+type FormStatus = 'idle' | 'sending' | 'sent' | 'error';
+
+export const DeveloperInfo: React.FC = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState<FormStatus>('idle');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !email || !message) return;
+
+    setStatus('sending');
+    // Simulate API call to send feedback
+    setTimeout(() => {
+        // Simulate a successful response
+        if (email !== 'error@test.com') {
+            setStatus('sent');
+            setName('');
+            setEmail('');
+            setMessage('');
+            setTimeout(() => setStatus('idle'), 5000); // Reset form status after 5 seconds
+        } else {
+            // Simulate an error
+            setStatus('error');
+        }
+    }, 2000);
+  };
+
+  return (
+    <div className="max-w-md mx-auto animate-fade-in">
+        <div className="bg-tiktok-card border border-tiktok-border rounded-xl p-8 shadow-lg">
+            <div className="flex flex-col items-center text-center">
+                <UserCircleIcon className="w-32 h-32 text-gray-600 mb-4" />
+                <h2 className="text-3xl font-bold text-white">kaima benjamin</h2>
+                <p className="text-gray-400 mt-1">Full-Stack Developer</p>
+                
+                <div className="mt-6 w-full border-t border-tiktok-border pt-6 space-y-4">
+                    <div className="flex items-center justify-center text-gray-300">
+                        <MailIcon className="w-5 h-5 mr-3 text-tiktok-cyan" />
+                        <a 
+                        href="mailto:benjakaimax425@gmail.com" 
+                        className="hover:text-tiktok-cyan transition-colors"
+                        >
+                            benjakaimax425@gmail.com
+                        </a>
+                    </div>
+                    <p className="text-sm text-gray-500">
+                        Crafting modern web experiences with passion and precision.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div className="bg-tiktok-card border border-tiktok-border rounded-xl p-8 shadow-lg mt-8 animate-fade-in" style={{ animationDelay: '200ms' }}>
+            <h3 className="text-2xl font-bold text-center text-white mb-6">Get in Touch</h3>
+            <form onSubmit={handleSubmit}>
+                <div className="space-y-4">
+                    <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-1">Name</label>
+                        <input type="text" id="name" value={name} onChange={e => setName(e.target.value)} required className="w-full bg-tiktok-input border border-tiktok-border rounded-md px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-tiktok-cyan" />
+                    </div>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                        <input type="email" id="email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full bg-tiktok-input border border-tiktok-border rounded-md px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-tiktok-cyan" />
+                    </div>
+                    <div>
+                        <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-1">Message</label>
+                        <textarea id="message" value={message} onChange={e => setMessage(e.target.value)} required rows={4} className="w-full bg-tiktok-input border border-tiktok-border rounded-md px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-tiktok-cyan"></textarea>
+                    </div>
+                </div>
+                <div className="mt-6">
+                    <button type="submit" disabled={status === 'sending'} className="w-full flex items-center justify-center bg-gradient-to-r from-tiktok-red to-tiktok-cyan text-white font-bold py-3 px-6 rounded-md transition-all duration-300 ease-in-out hover:scale-105 disabled:opacity-70 disabled:cursor-wait">
+                        {status === 'sending' ? <LoaderCircleIcon className="w-5 h-5 mr-2 animate-spin" /> : <SendHorizonalIcon className="w-5 h-5 mr-2" />}
+                        {status === 'sending' ? 'Sending...' : 'Send Feedback'}
+                    </button>
+                </div>
+            </form>
+            {status === 'sent' && (
+                <div className="mt-4 p-3 bg-green-900/30 border border-green-500/50 rounded-md text-center text-green-300 flex items-center justify-center animate-fade-in">
+                    <CheckCircle2Icon className="w-5 h-5 mr-2" />
+                    <p className="text-sm">Thank you! Your feedback has been sent.</p>
+                </div>
+            )}
+            {status === 'error' && (
+                 <div className="mt-4 p-3 bg-red-900/30 border border-red-500/50 rounded-md text-center text-red-300 flex items-center justify-center animate-fade-in">
+                    <AlertTriangleIcon className="w-5 h-5 mr-2" />
+                    <p className="text-sm">Something went wrong. Please try again.</p>
+                </div>
+            )}
+        </div>
+    </div>
+  );
+};
