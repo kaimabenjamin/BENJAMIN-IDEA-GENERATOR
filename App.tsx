@@ -18,10 +18,24 @@ type View = 'generator' | 'developer' | 'live-chat';
 // --- Components moved outside of App to prevent re-rendering issues ---
 
 const InitialState: React.FC = () => (
-  <div className="text-center text-gray-400 mt-20 flex flex-col items-center">
-    <LightbulbIcon className="w-16 h-16 mb-4 text-tiktok-cyan" />
-    <h2 className="text-2xl font-bold text-white">Unlock Your Next Viral Hit</h2>
-    <p className="max-w-md mt-2">Enter a topic and let our AI generate fresh, creative blog post ideas for you.</p>
+  <div className="text-center text-gray-400 mt-12 flex flex-col items-center animate-fade-in">
+    <div className="relative w-full max-w-lg mb-8 rounded-2xl overflow-hidden shadow-2xl border border-tiktok-border/50 group">
+      <img 
+        src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800" 
+        alt="Developer Workspace" 
+        className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-tiktok-bg via-tiktok-bg/20 to-transparent"></div>
+      <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+        <div className="bg-tiktok-cyan/20 backdrop-blur-md px-4 py-1 rounded-full border border-tiktok-cyan/30 text-tiktok-cyan text-xs font-bold uppercase tracking-widest">
+          AI-Powered Creativity
+        </div>
+      </div>
+    </div>
+    <h2 className="text-3xl font-extrabold text-white tracking-tight">Unlock Your Next Viral Hit</h2>
+    <p className="max-w-md mt-4 text-base text-gray-400 leading-relaxed italic">
+      "Great ideas start with a spark. Let our AI be your engine for content that resonates and engages."
+    </p>
   </div>
 );
 

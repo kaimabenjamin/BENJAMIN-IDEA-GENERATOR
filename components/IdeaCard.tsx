@@ -79,16 +79,40 @@ const BlogPostDetails: React.FC<{ idea: BlogPostIdea }> = ({ idea }) => (
 );
 
 export const IdeaCard: React.FC<{ idea: Idea }> = ({ idea }) => {
+    const imageUrl = idea.imageKeyword 
+        ? `https://loremflickr.com/800/450/${encodeURIComponent(idea.imageKeyword)}`
+        : null;
+
     return (
-        <div className="bg-tiktok-card border border-tiktok-border rounded-lg p-6 shadow-lg transition-all duration-300 hover:border-tiktok-cyan hover:shadow-2xl hover:shadow-tiktok-cyan/10 group flex flex-col relative overflow-hidden">
-            <h3 className="text-lg font-bold text-white leading-tight flex items-center">
-                <LightbulbIcon className="w-5 h-5 mr-3 text-tiktok-red flex-shrink-0" />
-                {idea.title}
-            </h3>
-            <p className="text-gray-300 mt-2 text-sm flex-grow">{idea.concept}</p>
-            
-            <div className="mt-4 pt-4 border-t border-tiktok-border/50">
-                <BlogPostDetails idea={idea} />
+        <div className="bg-tiktok-card border border-tiktok-border rounded-lg p-0 shadow-lg transition-all duration-300 hover:border-tiktok-cyan hover:shadow-2xl hover:shadow-tiktok-cyan/10 group flex flex-col relative overflow-hidden">
+            {imageUrl && (
+                <div className="w-full h-48 overflow-hidden relative">
+                    <img 
+                        src={imageUrl} 
+                        alt={idea.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-tiktok-bg to-transparent opacity-60"></div>
+                </div>
+            )}
+            <div className="p-6">
+                <h3 className="text-lg font-bold text-white leading-tight flex items-center">
+                    <LightbulbIcon className="w-5 h-5 mr-3 text-tiktok-red flex-shrink-0" />
+                    {idea.title}
+                </h3>
+                <p className="text-gray-300 mt-2 text-sm flex-grow">{idea.concept}</p>
+                
+                {idea.visualSuggestion && (
+                    <div className="mt-4 p-3 bg-white/5 rounded-lg border border-white/10 italic text-xs text-gray-400">
+                        <span className="font-semibold not-italic text-tiktok-cyan mr-1">Visual Idea:</span>
+                        {idea.visualSuggestion}
+                    </div>
+                )}
+
+                <div className="mt-4 pt-4 border-t border-tiktok-border/50">
+                    <BlogPostDetails idea={idea} />
+                </div>
             </div>
 
             {/* Scan animation in footer */}

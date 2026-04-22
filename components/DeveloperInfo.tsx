@@ -14,20 +14,23 @@ export const DeveloperInfo: React.FC = () => {
     if (!name || !email || !message) return;
 
     setStatus('sending');
-    // Simulate API call to send feedback
+    
+    // Construct mailto link
+    const subject = encodeURIComponent(`Feedback from ${name} (Benjamin Idea Generator)`);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+    const mailtoUrl = `mailto:benjakaimax425@gmail.com?subject=${subject}&body=${body}`;
+    
+    // Open mailto link
+    window.location.href = mailtoUrl;
+
+    // Since we open the mail app, we assume the user follows through
     setTimeout(() => {
-        // Simulate a successful response
-        if (email !== 'error@test.com') {
-            setStatus('sent');
-            setName('');
-            setEmail('');
-            setMessage('');
-            setTimeout(() => setStatus('idle'), 5000); // Reset form status after 5 seconds
-        } else {
-            // Simulate an error
-            setStatus('error');
-        }
-    }, 2000);
+        setStatus('sent');
+        setName('');
+        setEmail('');
+        setMessage('');
+        setTimeout(() => setStatus('idle'), 5000);
+    }, 1000);
   };
 
   return (

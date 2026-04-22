@@ -33,9 +33,17 @@ const blogPostSchema = {
         metaDescription: {
             type: Type.STRING,
             description: "A concise and engaging meta description (under 160 characters) for search engine results."
+        },
+        visualSuggestion: {
+            type: Type.STRING,
+            description: "A description of a recommended header image or infographic for this blog post."
+        },
+        imageKeyword: {
+            type: Type.STRING,
+            description: "A single, highly relevant keyword to search for a stock image (e.g., 'coding', 'beach', 'technology')."
         }
     },
-    required: ['title', 'concept', 'outline', 'keywords', 'metaDescription'],
+    required: ['title', 'concept', 'outline', 'keywords', 'metaDescription', 'visualSuggestion', 'imageKeyword'],
 };
 
 const schemas = {
@@ -43,7 +51,7 @@ const schemas = {
 };
 
 const prompts = {
-    Blog: (topic: string, ideaType: IdeaType) => `As a seasoned content marketing expert, generate 2 deeply researched and compelling ${ideaType.toLowerCase()} blog post ideas for the topic "${topic}". Each idea must include an SEO-optimized title, a comprehensive multi-point outline, a strategic list of keywords, and an engaging meta description. The concepts should be thorough and demonstrate a deep understanding of the topic.`,
+    Blog: (topic: string, ideaType: IdeaType) => `As a seasoned content marketing expert, generate 2 deeply researched and compelling ${ideaType.toLowerCase()} blog post ideas for the topic "${topic}". Each idea must include an SEO-optimized title, a comprehensive multi-point outline, a strategic list of keywords, an engaging meta description, a visual suggestion for imagery, and a single 'imageKeyword' that best represents the post's theme. The concepts should be thorough and demonstrate a deep understanding of the topic.`,
 };
 
 export const generateIdeas = async (topic: string, ideaType: IdeaType): Promise<Idea[]> => {
@@ -57,7 +65,7 @@ export const generateIdeas = async (topic: string, ideaType: IdeaType): Promise<
     };
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3-flash-preview",
       contents: prompt,
       config: {
         responseMimeType: "application/json",
@@ -91,7 +99,7 @@ export const generateSuggestions = async (topic: string): Promise<string[]> => {
     const prompt = `Generate 3 creative and specific blog post topic suggestions related to "${topic}". The suggestions should be concise and ready to be used as topics. Return the response as a JSON array of strings. Example: ["Suggestion 1", "Suggestion 2", "Suggestion 3"]`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3-flash-preview",
       contents: prompt,
       config: {
         responseMimeType: "application/json",

@@ -2,6 +2,8 @@
 export interface BaseIdea {
   title: string;
   concept: string;
+  visualSuggestion?: string;
+  imageKeyword?: string;
 }
 
 export interface BlogPostIdea extends BaseIdea {
