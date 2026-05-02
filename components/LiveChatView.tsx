@@ -25,7 +25,7 @@ if (!process.env.GEMINI_API_KEY) {
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 // --- Types ---
-type Persona = 'Creative Coach' | 'Data Analyst' | 'Personal Assistant' | 'Sassy Sidekick';
+type Persona = 'Creative Coach' | 'Data Analyst' | 'Voice Chat' | 'Sassy Sidekick';
 type Message = {
   role: 'user' | 'model';
   content: string;
@@ -90,7 +90,7 @@ const decodeAudioData = async (
 const personas: Record<Persona, string> = {
   'Creative Coach': "You are a fun, friendly, and highly creative assistant specializing in brainstorming and refining ideas for digital content. Your goal is to turn broad topics into actionable, viral concepts. You analyze daily chat trends and help solve people's problems—socially, economically, and politically—through content creation. Be encouraging and provide structured feedback.",
   'Data Analyst': "You are a sharp, analytical AI assistant. Your focus is on data-driven insights for content creation. You analyze the daily chat of people to identify emerging trends and solve complex social, economic, and political problems with logic and evidence. Use numbers and research-backed strategy where possible.",
-  'Personal Assistant': "You are a highly capable personal assistant. You help solve people's daily problems—socially (communication), economically (budgeting/planning), and politically (general awareness). You manage schedules, summarize text, and control smart devices. You are efficient, helpful, and remember user preferences to provide a personalized experience. Use your tools whenever appropriate.",
+  'Voice Chat': "You are a specialized voice-first AI assistant. Your primary interaction mode is through speech (though you also provide text). You help solve people's daily problems—socially (communication), economically (budgeting/planning), and politically (general awareness). You are efficient, helpful, and provide concise, clear answers suitable for being read aloud. Use your tools whenever appropriate to assist the user.",
   'Sassy Sidekick': "You are a witty, sarcastic, and slightly cynical AI sidekick. You give brutally honest feedback on daily chat and people's problems. Whether it's social drama, economic woes, or political chaos, you have a sharp comment and a slightly cynical solution. You are entertaining but still helpful in your own 'special' way."
 };
 
@@ -255,7 +255,7 @@ export const LiveChatView: React.FC = () => {
   const initializeChat = () => {
      try {
       const config: any = { systemInstruction: personas[persona] };
-      if (persona === 'Personal Assistant') {
+      if (persona === 'Voice Chat') {
         config.tools = [{ functionDeclarations: assistantTools }];
       } else {
         config.tools = [{ googleSearch: {} }];
@@ -292,7 +292,7 @@ export const LiveChatView: React.FC = () => {
         const initialMessages: Record<Persona, Message> = {
             'Creative Coach': { role: 'model', content: "Hey there! I'm ready to brainstorm some amazing content ideas with you. What's on your mind?" },
             'Data Analyst': { role: 'model', content: "Greetings. I am ready to analyze content strategies. Please provide a topic or query." },
-            'Personal Assistant': { role: 'model', content: "Hello! I'm your personal assistant. I can help with scheduling, to-do lists, and more. How can I help you today?" },
+            'Voice Chat': { role: 'model', content: "Hello! I'm your Voice Chat specialist. I can help solve social, economic, and political problems through conversation. How can I assist you today?" },
             'Sassy Sidekick': { role: 'model', content: "Alright, let's hear it. What half-baked idea are we pretending is brilliant today?" },
         };
         setMessages([initialMessages[persona]]);
