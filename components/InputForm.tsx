@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Wand2Icon, LoaderCircleIcon } from './icons';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Wand2, Loader2 } from 'lucide-react';
 import { generateSuggestions } from '../services/geminiService';
 
 interface InputFormProps {
@@ -70,44 +71,60 @@ export const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading, top
           disabled={isLoading}
           autoComplete="off"
         />
-        <button
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           type="submit"
           disabled={isLoading || !topic.trim()}
-          className="flex items-center justify-center bg-gradient-to-r from-tiktok-red to-tiktok-cyan text-white font-bold py-3 px-6 rounded-md transition-all duration-300 ease-in-out hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+          className="flex items-center justify-center bg-gradient-to-r from-tiktok-red to-tiktok-cyan text-white font-bold py-3 px-6 rounded-md transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
         >
           {isLoading ? (
-            'Generating...'
+            <span className="flex items-center">
+              <Loader2 className="w-5 h-5 mr-3 animate-spin" />
+              Generating...
+            </span>
           ) : (
             <>
-              <Wand2Icon className="w-5 h-5 mr-2" />
+              <Wand2 className="w-5 h-5 mr-2" />
               Generate Ideas
             </>
           )}
-        </button>
+        </motion.button>
       </div>
 
-      {(isSuggesting || suggestions.length > 0) && (
-        <div className="mt-4 animate-fade-in">
-          <div className="flex items-center gap-2 mb-2">
-            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              AI Suggestions
-            </h4>
-            {isSuggesting && <LoaderCircleIcon className="w-4 h-4 text-gray-400 animate-spin" />}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {suggestions.map((suggestion, index) => (
-              <button
-                key={index}
-                type="button"
-                onClick={() => handleSuggestionClick(suggestion)}
-                className="bg-tiktok-input border border-tiktok-border text-gray-300 text-sm px-3 py-1.5 rounded-full hover:bg-tiktok-cyan/10 hover:text-tiktok-cyan hover:border-tiktok-cyan/50 transition-colors"
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {(isSuggesting || suggestions.length > 0) && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="mt-4"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                AI Suggestions
+              </h4>
+              {isSuggesting && <Loader2 className="w-3 h-3 text-tiktok-cyan animate-spin" />}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {suggestions.map((suggestion, index) => (
+                <motion.button
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(42, 242, 255, 0.1)' }}
+                  type="button"
+                  onClick={() => handleSuggestionClick(suggestion)}
+                  className="bg-tiktok-input border border-tiktok-border text-gray-300 text-sm px-3 py-1.5 rounded-full hover:text-tiktok-cyan hover:border-tiktok-cyan/50 transition-colors"
+                >
+                  {suggestion}
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </form>
   );
 };
+

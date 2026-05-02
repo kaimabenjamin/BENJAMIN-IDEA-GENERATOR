@@ -1,11 +1,12 @@
 import React from 'react';
-import { type Idea, type BlogPostIdea } from '../types';
+import { motion } from 'framer-motion';
 import { 
-    LightbulbIcon,
-    KeyRoundIcon,
-    AlignLeftIcon,
-    ExternalLinkIcon,
-} from './icons';
+    Lightbulb, 
+    KeyRound, 
+    AlignLeft, 
+    ExternalLink 
+} from 'lucide-react';
+import { type Idea, type BlogPostIdea } from '../types';
 
 interface InfoRowProps {
   icon: React.ReactNode;
@@ -43,7 +44,7 @@ const InfoRow: React.FC<InfoRowProps> = ({ icon, label, value }) => {
                                 className="bg-gray-700 text-gray-200 text-xs font-medium px-2.5 py-1 rounded-full hover:bg-tiktok-cyan hover:text-tiktok-bg transition-colors duration-200 flex items-center gap-1.5"
                             >
                                 {displayItem}
-                                <ExternalLinkIcon className="w-3 h-3 opacity-70" />
+                                <ExternalLink className="w-3 h-3 opacity-70" />
                             </a>
                         );
                     }
@@ -72,9 +73,9 @@ const InfoRow: React.FC<InfoRowProps> = ({ icon, label, value }) => {
 
 const BlogPostDetails: React.FC<{ idea: BlogPostIdea }> = ({ idea }) => (
     <>
-        <InfoRow icon={<AlignLeftIcon className="w-5 h-5" />} label="Meta Description" value={idea.metaDescription} />
-        <InfoRow icon={<AlignLeftIcon className="w-5 h-5" />} label="Outline" value={idea.outline.join(' -> ')} />
-        <InfoRow icon={<KeyRoundIcon className="w-5 h-5" />} label="Keywords" value={idea.keywords} />
+        <InfoRow icon={<AlignLeft className="w-5 h-5" />} label="Meta Description" value={idea.metaDescription} />
+        <InfoRow icon={<AlignLeft className="w-5 h-5" />} label="Outline" value={idea.outline.join(' -> ')} />
+        <InfoRow icon={<KeyRound className="w-5 h-5" />} label="Keywords" value={idea.keywords} />
     </>
 );
 
@@ -84,7 +85,12 @@ export const IdeaCard: React.FC<{ idea: Idea }> = ({ idea }) => {
         : null;
 
     return (
-        <div className="bg-tiktok-card border border-tiktok-border rounded-lg p-0 shadow-lg transition-all duration-300 hover:border-tiktok-cyan hover:shadow-2xl hover:shadow-tiktok-cyan/10 group flex flex-col relative overflow-hidden">
+        <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="bg-tiktok-card border border-tiktok-border rounded-lg p-0 shadow-lg transition-all duration-300 hover:border-tiktok-cyan hover:shadow-2xl hover:shadow-tiktok-cyan/10 group flex flex-col relative overflow-hidden"
+        >
             {imageUrl && (
                 <div className="w-full h-48 overflow-hidden relative">
                     <img 
@@ -98,7 +104,7 @@ export const IdeaCard: React.FC<{ idea: Idea }> = ({ idea }) => {
             )}
             <div className="p-6">
                 <h3 className="text-lg font-bold text-white leading-tight flex items-center">
-                    <LightbulbIcon className="w-5 h-5 mr-3 text-tiktok-red flex-shrink-0" />
+                    <Lightbulb className="w-5 h-5 mr-3 text-tiktok-red flex-shrink-0" />
                     {idea.title}
                 </h3>
                 <p className="text-gray-300 mt-2 text-sm flex-grow">{idea.concept}</p>
@@ -117,6 +123,6 @@ export const IdeaCard: React.FC<{ idea: Idea }> = ({ idea }) => {
 
             {/* Scan animation in footer */}
             <div className="footer-scan-line" />
-        </div>
+        </motion.div>
     );
 };

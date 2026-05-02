@@ -1,13 +1,13 @@
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI, Type, ThinkingLevel } from "@google/genai";
 import { type Idea } from '../types';
 import { type IdeaType } from "../components/IdeaTypeSelector";
 
-if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable is not set.");
+if (!process.env.GEMINI_API_KEY) {
+  throw new Error("GEMINI_API_KEY environment variable is not set.");
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const blogPostSchema = {
     type: Type.OBJECT,
@@ -108,6 +108,7 @@ export const generateSuggestions = async (topic: string): Promise<string[]> => {
           items: { type: Type.STRING },
         },
         temperature: 0.7,
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
       },
     });
 

@@ -1,13 +1,28 @@
 
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
 import { GoogleGenAI, Chat, Modality, Part, FunctionDeclaration, Type, FunctionCall } from "@google/genai";
-import { SendHorizonalIcon, LoaderCircleIcon, MicIcon, PaperclipIcon, MicOffIcon, Volume2Icon, SearchIcon, XCircleIcon, CalendarPlusIcon, ListTodoIcon, LampIcon, MailOpenIcon, ClipboardCheckIcon, XIcon } from './icons';
+import { 
+  SendHorizontal, 
+  Loader2, 
+  Mic, 
+  Paperclip, 
+  MicOff, 
+  Volume2, 
+  Search, 
+  XCircle, 
+  CalendarPlus, 
+  ListTodo, 
+  Lamp, 
+  MailOpen, 
+  ClipboardCheck, 
+  X 
+} from 'lucide-react';
 
-if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable is not set.");
+if (!process.env.GEMINI_API_KEY) {
+  throw new Error("GEMINI_API_KEY environment variable is not set.");
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 // --- Types ---
 type Persona = 'Creative Coach' | 'Data Analyst' | 'Personal Assistant' | 'Sassy Sidekick';
@@ -73,10 +88,10 @@ const decodeAudioData = async (
 
 // --- Constants ---
 const personas: Record<Persona, string> = {
-  'Creative Coach': "You are a fun, friendly, and highly creative assistant specializing in brainstorming and refining ideas for digital content...",
-  'Data Analyst': "You are a sharp, analytical AI assistant. Your focus is on data-driven insights for content creation...",
-  'Personal Assistant': "You are a highly capable personal assistant. You can manage schedules, organize to-do lists, summarize text, and control smart devices. You are efficient, helpful, and remember user preferences mentioned in the conversation to provide a personalized experience. Use your tools whenever a user's request matches their capabilities.",
-  'Sassy Sidekick': "You are a witty, sarcastic, and slightly cynical AI sidekick. You give brutally honest feedback on content ideas..."
+  'Creative Coach': "You are a fun, friendly, and highly creative assistant specializing in brainstorming and refining ideas for digital content. Your goal is to turn broad topics into actionable, viral concepts. You analyze daily chat trends and help solve people's problems—socially, economically, and politically—through content creation. Be encouraging and provide structured feedback.",
+  'Data Analyst': "You are a sharp, analytical AI assistant. Your focus is on data-driven insights for content creation. You analyze the daily chat of people to identify emerging trends and solve complex social, economic, and political problems with logic and evidence. Use numbers and research-backed strategy where possible.",
+  'Personal Assistant': "You are a highly capable personal assistant. You help solve people's daily problems—socially (communication), economically (budgeting/planning), and politically (general awareness). You manage schedules, summarize text, and control smart devices. You are efficient, helpful, and remember user preferences to provide a personalized experience. Use your tools whenever appropriate.",
+  'Sassy Sidekick': "You are a witty, sarcastic, and slightly cynical AI sidekick. You give brutally honest feedback on daily chat and people's problems. Whether it's social drama, economic woes, or political chaos, you have a sharp comment and a slightly cynical solution. You are entertaining but still helpful in your own 'special' way."
 };
 
 const assistantTools: FunctionDeclaration[] = [
@@ -136,11 +151,11 @@ const BlinkingCursor = () => <span className="inline-block w-2 h-4 bg-tiktok-cya
 
 const ToolCallDisplay: React.FC<{ toolCall: FunctionCall, result?: any }> = ({ toolCall, result }) => {
     const iconMap: Record<string, React.ReactElement> = {
-        create_calendar_event: <CalendarPlusIcon className="w-5 h-5" />,
-        add_to_list: <ListTodoIcon className="w-5 h-5" />,
-        view_list: <ListTodoIcon className="w-5 h-5" />,
-        summarize_email: <MailOpenIcon className="w-5 h-5" />,
-        toggle_smart_light: <LampIcon className="w-5 h-5" />,
+        create_calendar_event: <CalendarPlus className="w-5 h-5" />,
+        add_to_list: <ListTodo className="w-5 h-5" />,
+        view_list: <ListTodo className="w-5 h-5" />,
+        summarize_email: <MailOpen className="w-5 h-5" />,
+        toggle_smart_light: <Lamp className="w-5 h-5" />,
     };
 
     const formatTitle = (name: string) => name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -148,9 +163,9 @@ const ToolCallDisplay: React.FC<{ toolCall: FunctionCall, result?: any }> = ({ t
     return (
         <div className="my-2 p-3 bg-tiktok-bg/50 border border-tiktok-border rounded-lg">
             <div className="flex items-center gap-2 text-sm font-semibold text-gray-300">
-                {iconMap[toolCall.name] || <ClipboardCheckIcon className="w-5 h-5" />}
+                {iconMap[toolCall.name] || <ClipboardCheck className="w-5 h-5" />}
                 <span>{formatTitle(toolCall.name)}</span>
-                {!result && <LoaderCircleIcon className="w-4 h-4 animate-spin" />}
+                {!result && <Loader2 className="w-4 h-4 animate-spin" />}
             </div>
             <div className="text-xs text-gray-400 mt-2 pl-7 space-y-1">
                 {Object.entries(toolCall.args).map(([key, value]) => (
@@ -182,12 +197,12 @@ const ChatMessage: React.FC<{ message: Message; isStreaming: boolean; onReplayAu
         {message.role === 'model' && isStreaming && <BlinkingCursor />}
         {message.role === 'model' && message.audio && (
           <button onClick={() => onReplayAudio(message.audio!)} className="text-tiktok-cyan/70 hover:text-tiktok-cyan transition-colors mt-2 p-1 rounded-full hover:bg-white/10">
-            <Volume2Icon className="w-4 h-4" />
+            <Volume2 className="w-4 h-4" />
           </button>
         )}
         {message.sources && message.sources.length > 0 && (
           <div className="mt-3 pt-3 border-t border-tiktok-border/50">
-            <h4 className="text-xs font-semibold text-gray-400 mb-2 flex items-center gap-2"><SearchIcon className="w-4 h-4" /> Sources:</h4>
+            <h4 className="text-xs font-semibold text-gray-400 mb-2 flex items-center gap-2"><Search className="w-4 h-4" /> Sources:</h4>
             <div className="flex flex-wrap gap-2">
               {message.sources.map((source, idx) => (
                 <a key={idx} href={source.web?.uri} target="_blank" rel="noopener noreferrer" className="text-xs bg-tiktok-bg text-gray-300 px-2 py-1 rounded-md hover:bg-tiktok-cyan hover:text-black transition-colors">
@@ -311,8 +326,25 @@ export const LiveChatView: React.FC = () => {
     initializeChat();
   };
 
-  const speak = async (text: string): Promise<AudioBuffer | null> => { return null };
-  const playAudio = (audioBuffer: AudioBuffer, ctx: AudioContext) => { };
+  const speak = async (text: string): Promise<AudioBuffer | null> => {
+    if (!text || typeof window === 'undefined') return null;
+    
+    // Using SpeechSynthesis for immediate playback and legacy support
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.pitch = 1;
+    utterance.rate = 1;
+    window.speechSynthesis.speak(utterance);
+    
+    return null; // Return null because we are using speechSynthesis which manages its own queue
+  };
+
+  const playAudio = (audioBuffer: AudioBuffer, ctx: AudioContext) => {
+    if (!audioBuffer || !ctx) return;
+    const source = ctx.createBufferSource();
+    source.buffer = audioBuffer;
+    source.connect(ctx.destination);
+    source.start();
+  };
 
   const handleSendMessage = async (e: FormEvent) => {
     e.preventDefault();
@@ -503,17 +535,17 @@ export const LiveChatView: React.FC = () => {
   };
   
   return (
-    <div className="flex flex-col h-[75vh] bg-tiktok-card border border-tiktok-border rounded-xl shadow-lg animate-fade-in">
-        <div className="flex items-center justify-between border-b border-tiktok-border px-4 py-2 bg-tiktok-bg/30 rounded-t-xl">
+    <div className="flex flex-col h-full bg-tiktok-card border border-tiktok-border rounded-xl shadow-2xl animate-fade-in overflow-hidden">
+        <div className="flex items-center justify-between border-b border-tiktok-border px-4 py-3 bg-tiktok-bg/50 backdrop-blur-md rounded-t-xl z-10">
             <div className="w-full max-w-3xl">
                 <PersonaSelector activePersona={persona} onPersonaChange={handlePersonaChange} />
             </div>
             <button onClick={handleClearHistory} className="ml-4 p-2 text-gray-400 hover:text-tiktok-red hover:bg-tiktok-red/10 rounded-full transition-colors flex-shrink-0" title="Clear Chat History">
-                <XIcon className="w-4 h-4" />
+                <X className="w-4 h-4" />
             </button>
         </div>
         
-      <div className="flex-grow p-6 overflow-y-auto">
+      <div className="flex-grow p-6 overflow-y-auto custom-scrollbar">
         {messages.map((msg, index) => (
           <ChatMessage
             key={index}
@@ -525,44 +557,48 @@ export const LiveChatView: React.FC = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {error && <div className="px-4 pb-2 text-center text-xs text-tiktok-red">{error}</div>}
+      {error && <div className="px-4 pb-2 text-center text-xs text-tiktok-red font-medium">{error}</div>}
 
-      <div className="p-4 border-t border-tiktok-border">
+      <div className="p-4 bg-tiktok-bg/30 border-t border-tiktok-border/50 backdrop-blur-md">
         {imagePreview && (
-          <div className="relative w-24 h-24 mb-2 p-1 border border-tiktok-border rounded-lg">
+          <div className="relative w-24 h-24 mb-4 p-1 border border-tiktok-border rounded-lg bg-tiktok-input shadow-inner">
             <img src={imagePreview} className="w-full h-full object-cover rounded" />
             <button
               onClick={() => { setImagePreview(null); setUploadedImage(null); }}
-              className="absolute -top-2 -right-2 bg-tiktok-input rounded-full text-white hover:bg-tiktok-red"
+              className="absolute -top-2 -right-2 bg-tiktok-red text-white rounded-full p-0.5 shadow-lg hover:scale-110 transition-transform"
             >
-              <XCircleIcon className="w-6 h-6" />
+              <XCircle className="w-5 h-5" />
             </button>
           </div>
         )}
-        <form onSubmit={handleSendMessage} className="flex items-center gap-2 sm:gap-4">
-          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-          <button type="button" onClick={() => fileInputRef.current?.click()} className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-colors" aria-label="Attach image">
-            <PaperclipIcon className="w-5 h-5" />
-          </button>
-          <button type="button" onClick={handleToggleRecording} className={`p-2 rounded-full transition-colors ${isRecording ? 'text-tiktok-red bg-red-500/10 animate-pulse' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} aria-label={isRecording ? 'Stop recording' : 'Start recording'}>
-             {isRecording ? <MicOffIcon className="w-5 h-5"/> : <MicIcon className="w-5 h-5" />}
-          </button>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask me anything..."
-            className="flex-grow bg-tiktok-input border border-tiktok-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-tiktok-cyan transition-all"
-            disabled={isLoading}
-            autoComplete="off"
-          />
+        <form onSubmit={handleSendMessage} className="flex items-center gap-2 sm:gap-4 max-w-5xl mx-auto">
+          <div className="flex items-center gap-1">
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+            <button type="button" onClick={() => fileInputRef.current?.click()} className="p-2.5 text-gray-400 hover:text-tiktok-cyan hover:bg-white/10 rounded-full transition-all" aria-label="Attach image">
+              <Paperclip className="w-5 h-5" />
+            </button>
+            <button type="button" onClick={handleToggleRecording} className={`p-2.5 rounded-full transition-all ${isRecording ? 'text-tiktok-red bg-red-500/10 animate-pulse scale-110' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} aria-label={isRecording ? 'Stop recording' : 'Start recording'}>
+               {isRecording ? <MicOff className="w-5 h-5"/> : <Mic className="w-5 h-5" />}
+            </button>
+          </div>
+          <div className="flex-grow relative">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask Benjamin anything..."
+              className="w-full bg-tiktok-input border border-tiktok-border rounded-xl px-5 py-3.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-tiktok-cyan/50 focus:border-tiktok-cyan/50 transition-all shadow-inner"
+              disabled={isLoading}
+              autoComplete="off"
+            />
+          </div>
           <button
             type="submit"
             disabled={isLoading || (!input.trim() && !uploadedImage)}
-            className="flex items-center justify-center bg-gradient-to-r from-tiktok-red to-tiktok-cyan text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 ease-in-out hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+            className="flex items-center justify-center bg-gradient-to-r from-tiktok-red to-tiktok-cyan text-white font-black py-3.5 px-8 rounded-xl transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-[0_0_20px_rgba(42,242,255,0.3)] disabled:opacity-30 disabled:cursor-not-allowed disabled:scale-100 disabled:grayscale uppercase text-xs tracking-widest"
             aria-label="Send message"
           >
-            {isLoading ? <LoaderCircleIcon className="w-5 h-5 animate-spin" /> : <SendHorizonalIcon className="w-5 h-5" />}
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <SendHorizontal className="w-5 h-5" />}
           </button>
         </form>
       </div>

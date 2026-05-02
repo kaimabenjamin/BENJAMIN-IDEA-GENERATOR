@@ -103,6 +103,39 @@
         animation: scan-horizontal 2.5s ease-in-out infinite;
         opacity: 0.9;
       }
+
+      /* Ghost Protocol Animation */
+      @keyframes letter-color-cycle {
+        0%, 100% { color: #00F2EA; text-shadow: 0 0 8px rgba(0, 242, 234, 0.6); }
+        33% { color: #EE1D52; text-shadow: 0 0 8px rgba(238, 29, 82, 0.6); }
+        66% { color: #ffffff; text-shadow: 0 0 8px rgba(255, 255, 255, 0.6); }
+      }
+      .letter-animate {
+        display: inline-block;
+        animation: letter-color-cycle 4s linear infinite;
+      }
+      
+      @keyframes tech-border-flow {
+        0% { box-shadow: 0 0 5px #00F2EA, inset 0 0 5px #00F2EA; border-color: #00F2EA; }
+        50% { box-shadow: 0 0 15px #EE1D52, inset 0 0 10px #EE1D52; border-color: #EE1D52; }
+        100% { box-shadow: 0 0 5px #00F2EA, inset 0 0 5px #00F2EA; border-color: #00F2EA; }
+      }
+      .tech-border-animate {
+        animation: tech-border-flow 3s ease-in-out infinite;
+      }
+
+      @keyframes tech-ghost-scan {
+        0% { transform: translateY(-100%); opacity: 0; }
+        50% { opacity: 0.5; }
+        100% { transform: translateY(100%); opacity: 0; }
+      }
+      .tech-scan-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent, rgba(42, 242, 255, 0.2), transparent);
+        animation: tech-ghost-scan 2s linear infinite;
+        pointer-events: none;
+      }
     </style>
     <script>
       tailwind.config = {

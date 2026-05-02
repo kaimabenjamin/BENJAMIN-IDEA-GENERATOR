@@ -1,18 +1,20 @@
 
 import React from 'react';
 import { 
-    XIcon, 
-    ExternalLinkIcon, 
-    LightbulbIcon, 
+    X, 
+    ExternalLink, 
+    Lightbulb, 
+    CircleUser,
+    History,
+    Trash2,
+    Video
+} from 'lucide-react';
+import { 
     GoogleIcon,
     AppleIcon,
     TikTokIcon,
-    YouTubeIcon,
     ChatGPTIcon,
     MetaIcon,
-    UserCircleIcon,
-    HistoryIcon,
-    Trash2Icon
 } from './icons';
 
 interface SideMenuProps {
@@ -23,17 +25,17 @@ interface SideMenuProps {
 }
 
 const ideaStarters = [
-    { name: "Gaming Highlights", icon: <LightbulbIcon/> },
-    { name: "Cooking Tutorials", icon: <LightbulbIcon/> },
-    { name: "DIY Crafts", icon: <LightbulbIcon/> },
-    { name: "Comedy Skits", icon: <LightbulbIcon/> },
-    { name: "Fashion Trends", icon: <LightbulbIcon/> },
-    { name: "Travel Vlogs", icon: <LightbulbIcon/> },
-    { name: "Tech & Apps", icon: <LightbulbIcon/> },
-    { name: "Websites & Digital Projects", icon: <LightbulbIcon/> },
-    { name: "Business & Startups", icon: <LightbulbIcon/> },
-    { name: "Personal Development", icon: <LightbulbIcon/> },
-    { name: "Hobbies & Creativity", icon: <LightbulbIcon/> },
+    { name: "Gaming Highlights", icon: <Lightbulb/> },
+    { name: "Cooking Tutorials", icon: <Lightbulb/> },
+    { name: "DIY Crafts", icon: <Lightbulb/> },
+    { name: "Comedy Skits", icon: <Lightbulb/> },
+    { name: "Fashion Trends", icon: <Lightbulb/> },
+    { name: "Travel Vlogs", icon: <Lightbulb/> },
+    { name: "Tech & Apps", icon: <Lightbulb/> },
+    { name: "Websites & Digital Projects", icon: <Lightbulb/> },
+    { name: "Business & Startups", icon: <Lightbulb/> },
+    { name: "Personal Development", icon: <Lightbulb/> },
+    { name: "Hobbies & Creativity", icon: <Lightbulb/> },
 ];
 
 const researchLinks = [
@@ -42,8 +44,8 @@ const researchLinks = [
     { name: "ChatGPT", href: "https://chat.openai.com/", icon: <ChatGPTIcon className="w-5 h-5"/> },
     { name: "Meta", href: "https://www.meta.com/", icon: <MetaIcon className="w-5 h-5"/> },
     { name: "TikTok", href: "https://www.tiktok.com/search", icon: <TikTokIcon className="w-5 h-5"/> },
-    { name: "YouTube", href: "https://youtube.com", icon: <YouTubeIcon className="w-5 h-5"/> },
-    { name: "Developer Site", href: "https://kaimaxpro.mystrikingly.com", icon: <UserCircleIcon className="w-5 h-5"/> },
+    { name: "YouTube", href: "https://youtube.com", icon: <Video className="w-5 h-5"/> },
+    { name: "Developer Site", href: "https://kaimaxpro.mystrikingly.com", icon: <CircleUser className="w-5 h-5"/> },
 ];
 
 export const SideMenu: React.FC<SideMenuProps> = ({ onClose, onSelectTopic, recentTopics, onClearRecentTopics }) => {
@@ -61,7 +63,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ onClose, onSelectTopic, rece
         <div className="flex items-center justify-between p-4 border-b border-tiktok-border">
           <h2 className="text-lg font-semibold text-white">Menu</h2>
           <button onClick={onClose} className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-colors" aria-label="Close menu">
-            <XIcon className="w-6 h-6" />
+            <X className="w-6 h-6" />
           </button>
         </div>
 
@@ -77,7 +79,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ onClose, onSelectTopic, rece
                             className="p-1 text-gray-500 hover:text-tiktok-red transition-colors"
                             title="Clear Recent Topics"
                         >
-                            <Trash2Icon className="w-4 h-4" />
+                            <Trash2 className="w-4 h-4" />
                         </button>
                     </div>
                     <div className="space-y-2">
@@ -88,7 +90,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ onClose, onSelectTopic, rece
                                 className="w-full flex items-center text-left px-3 py-2 text-gray-200 hover:bg-tiktok-cyan/10 hover:text-tiktok-cyan rounded-md transition-colors group"
                             >
                                 <span className="mr-3 text-gray-500 group-hover:text-tiktok-cyan">
-                                    <HistoryIcon className="w-4 h-4" />
+                                    <History className="w-4 h-4" />
                                 </span>
                                 <span className="truncate">{topic}</span>
                             </button>
@@ -126,7 +128,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ onClose, onSelectTopic, rece
                                 <span className="mr-3 text-gray-400">{link.icon}</span>
                                 <span>{link.name}</span>
                             </div>
-                           <ExternalLinkIcon className="w-4 h-4 text-gray-500 group-hover:text-gray-300 transition-colors" />
+                           <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-gray-300 transition-colors" />
                         </a>
                     ))}
                 </div>
