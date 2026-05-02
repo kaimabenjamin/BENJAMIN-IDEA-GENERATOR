@@ -70,9 +70,9 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onFeedbackClick, on
           </div>
         )}
 
-        {!isChat && (
+        <div className="flex items-center gap-3">
           <a 
-            href="mailto:benjakaimax425@gmail.com?subject=Benjamin Idea Generator Feedback"
+            href="mailto:benjakaimax425@gmail.com?subject=App Performance %26 Usage Feedback&body=Hello Benjamin Team,%0D%0A%0D%0AI would like to provide feedback on the app usage and performance to help increase the quality:%0D%0A%0D%0A"
             className="flex items-center gap-2 text-white bg-gradient-to-r from-tiktok-red/20 to-tiktok-cyan/20 border border-tiktok-cyan/30 px-3 sm:px-4 py-2 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(42,242,255,0.4)] relative group overflow-hidden" 
             aria-label="Send feedback"
           >
@@ -80,7 +80,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onFeedbackClick, on
             <Mail className="w-5 h-5 text-tiktok-cyan animate-pulse" />
             <span className="hidden sm:inline font-bold text-xs tracking-wide relative z-10">FEEDBACK</span>
           </a>
-        )}
+        </div>
 
         {isChat && (
           <div className="flex-grow flex justify-center items-center">
@@ -102,8 +102,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onFeedbackClick, on
           </div>
         )}
 
-        {/* Empty div to balance the layout when back button is present */}
-        {isChat && <div className="w-24"></div>}
+        {isChat && <div className="w-48 hidden lg:block"></div>}
       </div>
     </header>
   );

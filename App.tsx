@@ -1,7 +1,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, Lightbulb, Mail, Sparkles } from 'lucide-react';
+import { AlertTriangle, Lightbulb, Mail, Sparkles, Globe } from 'lucide-react';
 import { Header } from './components/Header';
 import { SubMenu } from './components/SubMenu';
 import { SideMenu } from './components/SideMenu';
@@ -281,7 +281,7 @@ const App: React.FC = () => {
                   </h2>
                 </div>
                 <p className="text-gray-500 text-sm max-w-xs leading-relaxed">
-                  Empowering content creators with next-generation AI viral content strategies. 
+                  Empowering mass with next-generation AI viral content strategies. 
                   <span className="block mt-1 font-bold text-gray-600 uppercase text-[10px] tracking-widest leading-none">High-Powered Production</span>
                 </p>
               </div>
@@ -289,16 +289,25 @@ const App: React.FC = () => {
               <div className="flex flex-col items-center md:items-end gap-6 w-full md:w-auto">
                 <div className="flex flex-wrap items-center justify-center gap-6">
                   <a 
+                    href="https://www.kaimax-in-technology.mystrikingly.com" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-tiktok-cyan transition-all duration-300 flex items-center gap-2 group bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:border-tiktok-cyan/30"
+                  >
+                    <Globe className="w-5 h-5 group-hover:scale-110 group-hover:text-tiktok-cyan transition-transform" />
+                    <span className="text-sm font-semibold tracking-tight">Visit Developer Portfolio</span>
+                  </a>
+                  <a 
                     href="mailto:benjakaimax425@gmail.com" 
                     className="text-gray-400 hover:text-tiktok-cyan transition-all duration-300 flex items-center gap-2 group bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:border-tiktok-cyan/30"
                   >
                     <Mail className="w-5 h-5 group-hover:scale-110 group-hover:text-tiktok-cyan transition-transform" />
-                    <span className="text-sm font-semibold tracking-tight">benjakaimax425@gmail.com</span>
+                    <span className="text-sm font-semibold tracking-tight">Email Us</span>
                   </a>
                 </div>
                 
                 <div className="flex flex-col items-center md:items-end text-[10px] uppercase font-bold tracking-[0.3em] text-gray-600 gap-2 w-full pt-6 border-t border-tiktok-border/20 md:border-t-0 md:pt-0">
-                  <p className="text-gray-500">© {new Date().getFullYear()} Ben Kaima. All Rights Reserved.</p>
+                  <p className="text-gray-500">© {new Date().getFullYear()} Benjamin Kaima. All Rights Reserved.</p>
                   <div className="flex items-center gap-2">
                     <span className="opacity-50">ENGINEERED BY</span>
                     <span className="text-tiktok-cyan opacity-80 hover:opacity-100 transition-opacity cursor-default">KAI-WEBDEVELOPERS</span>

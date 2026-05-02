@@ -45,7 +45,7 @@ const researchLinks = [
     { name: "Meta", href: "https://www.meta.com/", icon: <MetaIcon className="w-5 h-5"/> },
     { name: "TikTok", href: "https://www.tiktok.com/search", icon: <TikTokIcon className="w-5 h-5"/> },
     { name: "YouTube", href: "https://youtube.com", icon: <Video className="w-5 h-5"/> },
-    { name: "Developer Site", href: "https://kaimaxpro.mystrikingly.com", icon: <CircleUser className="w-5 h-5"/> },
+    { name: "Developer Site", href: "https://www.kaimax-in-technology.mystrikingly.com", icon: <CircleUser className="w-5 h-5"/> },
 ];
 
 export const SideMenu: React.FC<SideMenuProps> = ({ onClose, onSelectTopic, recentTopics, onClearRecentTopics }) => {
