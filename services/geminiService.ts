@@ -51,7 +51,26 @@ const schemas = {
 };
 
 const prompts = {
-    Blog: (topic: string, ideaType: IdeaType) => `As a seasoned content marketing expert, generate 2 deeply researched and compelling ${ideaType.toLowerCase()} blog post ideas for the topic "${topic}". Each idea must include an SEO-optimized title, a comprehensive multi-point outline, a strategic list of keywords, an engaging meta description, a visual suggestion for imagery, and a single 'imageKeyword' that best represents the post's theme. The concepts should be thorough and demonstrate a deep understanding of the topic.`,
+    Blog: (topic: string, ideaType: IdeaType) => `As a seasoned content marketing expert (developed by Kaima Benjamin, a Ugandan IT professional and consultant), generate 2 deeply researched, broad, and compelling ${ideaType.toLowerCase()} blog post ideas for the topic "${topic}". Each idea must include an SEO-optimized title, a very detailed and comprehensive multi-point outline covering multiple angles of the topic, a strategic list of keywords, an engaging meta description, a visual suggestion for imagery, and a single 'imageKeyword' that best represents the post's theme. The concepts should be thorough, broad, and demonstrate a deep understanding of the topic, providing enough information for someone to write a full article from.`,
+};
+
+export const summarizeIdea = async (content: string): Promise<string> => {
+  try {
+    const prompt = `Provide a concise, high-level executive summary of the following content in exactly 3 bullet points. Focus on the core value proposition and key takeaways:\n\n${content}`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: prompt,
+      config: {
+        temperature: 0.5,
+      },
+    });
+
+    return response.text.trim();
+  } catch (error) {
+    console.error("Error summarizing:", error);
+    throw new Error("Failed to generate a summary.");
+  }
 };
 
 export const generateIdeas = async (topic: string, ideaType: IdeaType): Promise<Idea[]> => {
@@ -72,6 +91,7 @@ export const generateIdeas = async (topic: string, ideaType: IdeaType): Promise<
         responseSchema: selectedSchema,
         temperature: 0.8,
         topP: 0.95,
+        tools: [{ googleSearch: {} }],
       },
     });
 
@@ -88,9 +108,12 @@ export const generateIdeas = async (topic: string, ideaType: IdeaType): Promise<
     
     return ideas.map(idea => ({ ...idea, platform })) as Idea[];
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error generating video ideas:", error);
-    throw new Error("Failed to generate ideas from the AI service.");
+    if (error?.message?.includes('RESOURCE_EXHAUSTED') || error?.status === 429) {
+      throw new Error("AI Quota Exceeded. The free usage limit of the AI model has been reached. Please wait a few minutes before trying again or come back tomorrow.");
+    }
+    throw new Error("Failed to generate ideas from the AI service. Please try again later.");
   }
 };
 
@@ -123,9 +146,12 @@ export const generateSuggestions = async (topic: string): Promise<string[]> => {
     }
     return [];
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error generating suggestions:", error);
-    // Don't throw, just return empty array on failure
+    if (error?.message?.includes('RESOURCE_EXHAUSTED') || error?.status === 429) {
+       // Silently fail suggestions on quota error, or we could set a flag
+       return [];
+    }
     return [];
   }
 };

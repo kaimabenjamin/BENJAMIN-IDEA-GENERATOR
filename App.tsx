@@ -168,6 +168,15 @@ const App: React.FC = () => {
   const [topic, setTopic] = useState<string>('');
   const [ideaType, setIdeaType] = useState<IdeaType>('Creative');
 
+  // Handle query parameter for external links
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const viewParam = params.get('view');
+    if (viewParam === 'developer') {
+      setActiveView('developer');
+    }
+  }, []);
+
   // Load recent topics from localStorage
   const [recentTopics, setRecentTopics] = useState<string[]>(() => {
     try {

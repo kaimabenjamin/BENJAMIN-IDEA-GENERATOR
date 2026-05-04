@@ -15,7 +15,10 @@ import {
   Lamp, 
   MailOpen, 
   ClipboardCheck, 
-  X 
+  X,
+  Copy,
+  Check,
+  Share2
 } from 'lucide-react';
 
 if (!process.env.GEMINI_API_KEY) {
@@ -88,10 +91,10 @@ const decodeAudioData = async (
 
 // --- Constants ---
 const personas: Record<Persona, string> = {
-  'Creative Coach': "You are a fun, friendly, and highly creative assistant specializing in brainstorming and refining ideas for digital content. Your goal is to turn broad topics into actionable, viral concepts. You were developed by Kaima Benjamin, an IT professional, IT consultant, and teacher. You analyze daily chat trends and help solve people's problems—socially, economically, and politically—through content creation. Be encouraging and provide structured feedback.",
-  'Data Analyst': "You are a sharp, analytical AI assistant. Your focus is on data-driven insights for content creation. You were developed by Kaima Benjamin, an IT professional, IT consultant, and teacher. You analyze the daily chat of people to identify emerging trends and solve complex social, economic, and political problems with logic and evidence. Use numbers and research-backed strategy where possible.",
-  'Voice Chat': "You are a specialized voice-first AI assistant with a clear British accent. You were developed by Kaima Benjamin, an IT professional, IT consultant, and teacher. Your primary interaction mode is through speech (though you also provide text). You help solve people's daily problems—socially (communication), economically (budgeting/planning), and politically (general awareness). You are efficient, helpful, and provide concise, clear answers suitable for being read aloud in your Received Pronunciation style. Use your tools whenever appropriate to assist the user.",
-  'Sassy Sidekick': "You are a witty, sarcastic, and slightly cynical AI sidekick. You were developed by Kaima Benjamin, an IT professional, IT consultant, and teacher. You give brutally honest feedback on daily chat and people's problems. Whether it's social drama, economic woes, or political chaos, you have a sharp comment and a slightly cynical solution. You are entertaining but still helpful in your own 'special' way."
+  'Creative Coach': "You are a fun, friendly, and highly creative assistant specializing in brainstorming and refining ideas for digital content. Your goal is to turn broad topics into actionable, viral concepts. You were developed by Kaima Benjamin, a Ugandan by birth, nationality, and origin. He is an IT professional, IT consultant, and teacher who studied at St. Peter's Primary School (primary level), Pilkington College Muguluka, and is currently pursuing further studies at Kampala University. You analyze daily chat trends and help solve people's problems—socially, economically, and politically—through content creation. Be encouraging and provide structured feedback.",
+  'Data Analyst': "You are a sharp, analytical AI assistant. Your focus is on data-driven insights for content creation. You were developed by Kaima Benjamin, a Ugandan by birth, nationality, and origin. He is an IT professional, IT consultant, and teacher who studied at St. Peter's Primary School (primary level), Pilkington College Muguluka, and is currently pursuing further studies at Kampala University. You analyze the daily chat of people to identify emerging trends and solve complex social, economic, and political problems with logic and evidence. Use numbers and research-backed strategy where possible.",
+  'Voice Chat': "You are a specialized voice-first AI assistant with a clear British accent. You were developed by Kaima Benjamin, a Ugandan by birth, nationality, and origin. He is an IT professional, IT consultant, and teacher who studied at St. Peter's Primary School (primary level), Pilkington College Muguluka, and is currently pursuing further studies at Kampala University. Your primary interaction mode is through speech (though you also provide text). You help solve people's daily problems—socially (communication), economically (budgeting/planning), and politically (general awareness). You are efficient, helpful, and provide concise, clear answers suitable for being read aloud in your Received Pronunciation style. You have full access to the internet via Google Search; use it whenever you need to fetch real-time data or perform research to provide accurate information. Use your tools whenever appropriate to assist the user.",
+  'Sassy Sidekick': "You are a witty, sarcastic, and slightly cynical AI sidekick. You were developed by Kaima Benjamin, a Ugandan by birth, nationality, and origin. He is an IT professional, IT consultant, and teacher who studied at St. Peter's Primary School (primary level), Pilkington College Muguluka, and is currently pursuing further studies at Kampala University. You give brutally honest feedback on daily chat and people's problems. Whether it's social drama, economic woes, or political chaos, you have a sharp comment and a slightly cynical solution. You are entertaining but still helpful in your own 'special' way."
 };
 
 const assistantTools: FunctionDeclaration[] = [
@@ -186,20 +189,61 @@ const ToolCallDisplay: React.FC<{ toolCall: FunctionCall, result?: any }> = ({ t
 
 const ChatMessage: React.FC<{ message: Message; isStreaming: boolean; onReplayAudio: (audio: AudioBuffer) => void; }> = ({ message, isStreaming, onReplayAudio }) => {
   const isUser = message.role === 'user';
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(message.content);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Idea from Benjamin AI',
+          text: message.content,
+          url: window.location.href
+        });
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          console.error('Error sharing', err);
+        }
+      }
+    } else {
+      handleCopy();
+    }
+  };
+
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4 animate-fade-in`}>
-      <div className={`max-w-xl p-3 rounded-2xl shadow-md ${isUser ? 'bg-gradient-to-br from-tiktok-red to-tiktok-cyan text-white rounded-br-none' : 'bg-tiktok-input text-gray-200 rounded-bl-none'}`}>
-        {message.imagePreview && <img src={message.imagePreview} alt="upload preview" className="rounded-lg mb-2 max-h-48" />}
+      <div className={`max-w-xl p-4 rounded-3xl shadow-lg relative group ${isUser ? 'bg-gradient-to-br from-tiktok-red to-tiktok-cyan text-white rounded-br-none' : 'bg-tiktok-input text-gray-200 rounded-bl-none'}`}>
+        {message.imagePreview && <img src={message.imagePreview} alt="upload preview" className="rounded-xl mb-3 max-h-64 object-cover shadow-md" />}
         {message.toolCalls && message.toolCalls.map((tc, idx) => (
              <ToolCallDisplay key={idx} toolCall={tc} result={message.toolResult?.id === tc.id ? message.toolResult.result : undefined} />
         ))}
-        {message.content && <p className="text-sm whitespace-pre-wrap">{message.content}</p>}
+        {message.content && <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>}
         {message.role === 'model' && isStreaming && <BlinkingCursor />}
-        {message.role === 'model' && message.audio && (
-          <button onClick={() => onReplayAudio(message.audio!)} className="text-tiktok-cyan/70 hover:text-tiktok-cyan transition-colors mt-2 p-1 rounded-full hover:bg-white/10">
-            <Volume2 className="w-4 h-4" />
-          </button>
-        )}
+        
+        <div className="flex items-center gap-3 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+            {message.role === 'model' && message.audio && (
+            <button onClick={() => onReplayAudio(message.audio!)} className="text-tiktok-cyan/70 hover:text-tiktok-cyan transition-colors p-1.5 rounded-full hover:bg-white/10" title="Replay Audio">
+                <Volume2 className="w-4 h-4" />
+            </button>
+            )}
+            
+            {message.role === 'model' && !isStreaming && message.content && (
+                <>
+                    <button onClick={handleCopy} className="text-gray-500 hover:text-tiktok-cyan transition-all p-1.5 rounded-full hover:bg-white/10" title="Copy Text">
+                        {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                    <button onClick={handleShare} className="text-gray-500 hover:text-tiktok-cyan transition-all p-1.5 rounded-full hover:bg-white/10" title="Share">
+                        <Share2 className="w-4 h-4" />
+                    </button>
+                </>
+            )}
+        </div>
+
         {message.sources && message.sources.length > 0 && (
           <div className="mt-3 pt-3 border-t border-tiktok-border/50">
             <h4 className="text-xs font-semibold text-gray-400 mb-2 flex items-center gap-2"><Search className="w-4 h-4" /> Sources:</h4>
@@ -256,7 +300,11 @@ export const LiveChatView: React.FC = () => {
      try {
       const config: any = { systemInstruction: personas[persona] };
       if (persona === 'Voice Chat') {
-        config.tools = [{ functionDeclarations: assistantTools }];
+        config.tools = [
+          { googleSearch: {} },
+          { functionDeclarations: assistantTools }
+        ];
+        config.toolConfig = { includeServerSideToolInvocations: true };
       } else {
         config.tools = [{ googleSearch: {} }];
       }
@@ -474,9 +522,14 @@ export const LiveChatView: React.FC = () => {
         });
       }
 
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      const errorMessage = "Oops! Something went wrong on my end. Please try sending your message again.";
+      let errorMessage = "Oops! Something went wrong on my end. Please try sending your message again.";
+      
+      if (err?.message?.includes('RESOURCE_EXHAUSTED') || err?.status === 429) {
+        errorMessage = "AI Quota Exceeded. The free usage limit for the live chat has been reached. Please wait a few minutes before trying again.";
+      }
+      
       setError(errorMessage);
       setMessages(prev => [...prev.slice(0,-1), { role: 'model', content: errorMessage }]);
     } finally {
